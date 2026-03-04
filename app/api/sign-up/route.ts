@@ -10,6 +10,7 @@ export async function POST(request: Request) {
 
     try {
         const { username, email, password } = await request.json()
+
         const existingUserVerifiedByUsername = await UserModel.findOne({
             username,
             isVerified: true
@@ -25,7 +26,6 @@ export async function POST(request: Request) {
         const existingUserByEmail = await UserModel.findOne({ email })
 
         const verifyCode = Math.floor(100000 + Math.random() * 900000).toString()
-
 
         if (existingUserByEmail) {
             if (existingUserByEmail.isVerified) {
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
             const newUser = await new UserModel({
                 username,
                 email,
-                hashedPassword,
+                password: hashedPassword,
                 verifyCode,
                 verifyCodeExpiry: expiryDate,
                 isVerified: false,
