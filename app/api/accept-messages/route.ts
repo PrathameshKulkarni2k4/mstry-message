@@ -29,7 +29,7 @@ export async function POST(request: Request) {
             {
                 isAcceptingMessages: acceptMessage
             },
-            { new: user }
+            { new: true }
         )
 
         if (!updatedUser) {

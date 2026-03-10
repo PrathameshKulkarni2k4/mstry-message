@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/model/User";
+import UserModel, { Message } from "@/model/User";
 import { messageSchema } from "@/schemas/MessageSchema";
 import { success } from "zod";
 
@@ -8,7 +8,7 @@ export async function POST(request: Request) {
 
     const { username, content } = await request.json()
     try {
-        const user = UserModel.findOne({ username })
+        const user = await UserModel.findOne({ username })
 
         if (!user) {
             return Response.json(
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
         }
 
         // if user accepting the messages
-        if (!user.isAcceptingMessage) {
+        if (!user.isAcceptingMessages) {
             return Response.json(
                 {
                     success: false,
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
             )
         }
 
-        const newMessage = { content, createdAt: new Date() }
+        const newMessage = { content, createdAt: new Date() } as Message
 
         user.messages.push(newMessage)
         await user.save()
