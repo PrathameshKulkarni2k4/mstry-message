@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
     // streamText is the modern Vercel AI SDK method
     const result = await streamText({
-      model: google('models/gemini-1.5-flash'), // Lightning-fast and heavily featured in the free tier
+      model: google('gemini-2.5-flash'), // Lightning-fast and heavily featured in the free tier
       prompt: prompt,
     });
 
