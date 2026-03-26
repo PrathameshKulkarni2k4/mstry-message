@@ -3,7 +3,6 @@ import UserModel from "@/model/User";
 import bcrypt from "bcryptjs";
 
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
-import { success } from "zod";
 
 export async function POST(request: Request) {
     await dbConnect()
@@ -34,7 +33,7 @@ export async function POST(request: Request) {
                     message: "User already exist with this email"
                 }, { status: 400 })
             } else {
-                const hashedPassword = await bcrypt.hash(password, 10) 
+                const hashedPassword = await bcrypt.hash(password, 10)
                 existingUserByEmail.password = hashedPassword;
                 existingUserByEmail.verifyCode = verifyCode;
                 existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000)
@@ -45,7 +44,7 @@ export async function POST(request: Request) {
             const expiryDate = new Date()
             expiryDate.setHours(expiryDate.getHours() + 1)
 
-            const newUser = await new UserModel({
+            const newUser = new UserModel({
                 username,
                 email,
                 password: hashedPassword,
@@ -74,7 +73,7 @@ export async function POST(request: Request) {
         }
 
         return Response.json({
-            success: false,
+            success: true,
             message: "User registered successfully. Please verify email"
         }, { status: 201 })
 
